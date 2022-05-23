@@ -13,10 +13,7 @@ async function createBundleFile(folder) {
       let extension = path.extname(file.name).slice(1);
       if (file.isFile() && extension === 'css') {
         let stream = fs.createReadStream(path.join(folder, file.name), 'utf-8');
-        let data = '';
-        stream.on('data', chunk => data += chunk);
-        stream.on('end', () => bundleFile.write(`${data}\n`));
-        stream.on('error', error => console.log('Error', error.message));
+        stream.pipe(bundleFile);
       }
     }
     stdout.write('Задача выполнена успешно! Ваши стили готовы.');
